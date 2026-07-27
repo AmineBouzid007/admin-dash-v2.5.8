@@ -120,23 +120,17 @@ export async function createProduct(formData: FormData) {
     throw new Error(error.message || "Failed to create product")
   }
 }
-  const slug =
-    fields.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') +
-    '-' +
-    Math.random().toString(36).slice(2, 7)
 
-  const { error } = await supabase.from('products').insert([{ slug, ...fields }])
-  if (error) throw new Error(error.message)
-
-  revalidatePath('/admin/products')
-  revalidatePath('/admin')
-}
 
 export async function updateProduct(id: string, formData: FormData) {
   const supabase = await createClient()
   const fields = productFieldsFromFormData(formData)
 
-  const { error } = await supabase.from('products').update(fields).eq('id', id)
+  const { error } = await supabase
+    .from('products')
+    .update(fields)
+    .eq('id', id)
+
   if (error) throw new Error(error.message)
 
   revalidatePath('/admin/products')
