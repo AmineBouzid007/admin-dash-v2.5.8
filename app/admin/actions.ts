@@ -92,7 +92,34 @@ export async function createProduct(formData: FormData) {
     const fields = productFieldsFromFormData(formData)
 
     console.log("PRODUCT FIELDS:", fields)
+
+    const slug =
+      fields.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '') +
+      '-' +
+      Math.random().toString(36).slice(2, 7)
+
+    const { error } = await supabase
+      .from('products')
+      .insert([{ slug, ...fields }])
+
+    if (error) {
+      console.error("CREATE PRODUCT ERROR:", error)
+      throw new Error(error.message)
+    }
+
+    revalidatePath('/admin/products')
+    revalidatePath('/admin')
+
+    return { success: true }
+
+  } catch (error: any) {
+    console.error("CREATE PRODUCT FAILED:", error)
+    throw new Error(error.message || "Failed to create product")
   }
+}
   const slug =
     fields.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') +
     '-' +
