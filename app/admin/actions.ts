@@ -407,11 +407,23 @@ export async function getCustomers(): Promise<{ data: Customer[] | null; error: 
 
 export async function getCustomRequests() {
   const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  console.log("ADMIN USER:", user)
+
   const { data, error } = await supabase
     .from('custom_requests')
     .select('*')
     .order('created_at', { ascending: false })
+
+  console.log("CUSTOM REQUEST RESULT:", data)
+  console.log("CUSTOM REQUEST ERROR:", error)
+
   if (error) throw new Error(error.message)
+
   return data
 }
 
