@@ -86,7 +86,7 @@ function productFieldsFromFormData(formData: FormData) {
 
 export async function createProduct(formData: FormData) {
   console.log("CREATE PRODUCT CALLED")
-
+//test
   try {
     const supabase = await createClient()
     const fields = productFieldsFromFormData(formData)
