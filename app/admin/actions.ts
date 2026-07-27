@@ -92,6 +92,7 @@ export async function createProduct(formData: FormData) {
     const fields = productFieldsFromFormData(formData)
 
     console.log("PRODUCT FIELDS:", fields)
+  }
   const slug =
     fields.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') +
     '-' +
